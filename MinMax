@@ -1,0 +1,14 @@
+def evaluate(board):
+    for row in board:
+        if all(cell == "X" for cell in row):
+            return 10
+        elif all(cell == "O" for cell in row):
+            return -10
+
+    for col in range(3):
+        if all(board[row][col] == "X" for row in range(3)):
+            return 10
+        elif all(board[row][col] == "O" for row in range(3)):
+            return -10
+
+    if all
