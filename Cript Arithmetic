@@ -1,0 +1,34 @@
+import itertools
+
+def is_valid(puzzle, solution):
+    # Check if the solution satisfies the equation
+    expr = puzzle.replace(" ", "")
+    for char, digit in solution.items():
+        expr = expr.replace(char, str(digit))
+    try:
+        return eval(expr) == 0
+    except (SyntaxError, ZeroDivisionError):
+        return False
+
+def solve_cryptarithmetic(puzzle):
+    unique_chars = set(char for char in puzzle if char.isalpha())
+    if len(unique_chars) > 10:
+        print("There are more than 10 unique letters. No solution exists.")
+        return
+
+    for permutation in itertools.permutations(range(10), len(unique_chars)):
+        solution = dict(zip(unique_chars, permutation))
+        if solution[puzzle[0]] == 0:  # Leading zeros are not allowed
+            continue
+        if is_valid(puzzle, solution):
+            print("Solution found:")
+            for char in unique_chars:
+                print(f"{char}: {solution[char]}")
+            return
+
+    print("No solution found.")
+
+if __name__ == "__main__":
+    puzzle = "SEND + MORE = MONEY"
+    print(f"Solving the Cryptarithmetic puzzle: {puzzle}")
+    solve_cryptarithmetic(puzzle)
