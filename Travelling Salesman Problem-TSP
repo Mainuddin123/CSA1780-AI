@@ -1,0 +1,33 @@
+import itertools
+
+def tsp_bruteforce(graph, start):
+    nodes = list(graph.keys())
+    nodes.remove(start)
+    min_path = None
+    min_distance = float('inf')
+
+    for path in itertools.permutations(nodes):
+        path = (start,) + path + (start,)
+        distance = 0
+
+        for i in range(len(path) - 1):
+            distance += graph[path[i]][path[i + 1]]
+
+        if distance < min_distance:
+            min_distance = distance
+            min_path = path
+
+    return min_path, min_distance
+
+if __name__ == "__main__":
+    graph = {
+        'A': {'B': 10, 'C': 15, 'D': 20},
+        'B': {'A': 10, 'C': 35, 'D': 25},
+        'C': {'A': 15, 'B': 35, 'D': 30},
+        'D': {'A': 20, 'B': 25, 'C': 30}
+    }
+    start_node = 'A'
+
+    min_path, min_distance = tsp_bruteforce(graph, start_node)
+    print(f"Shortest TSP path: {min_path}")
+    print(f"Shortest TSP distance: {min_distance}")
