@@ -1,0 +1,34 @@
+class VacuumCleaner:
+    def __init__(self):
+        self.location = "A"
+        self.status = "Clean"
+
+    def move(self, location):
+        self.location = location
+        print(f"Moved to {location}")
+
+    def clean(self):
+        self.status = "Clean"
+        print("Cleaned the room")
+
+    def dirty(self):
+        self.status = "Dirty"
+        print("Room is dirty")
+
+def clean_room():
+    vacuum = VacuumCleaner()
+    room_status = {"A": "Clean", "B": "Dirty"}
+
+    while True:
+        if vacuum.status == "Clean":
+            vacuum.clean()
+            room_status[vacuum.location] = "Clean"
+        else:
+            vacuum.move("A" if vacuum.location == "B" else "B")
+            room_status[vacuum.location] = "Clean"
+
+        if all(status == "Clean" for status in room_status.values()):
+            break
+
+if __name__ == "__main__":
+    clean_room()
