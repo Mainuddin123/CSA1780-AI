@@ -1,0 +1,47 @@
+from itertools import product
+
+def map_coloring(countries, colors, constraints):
+    assignments = {}
+    
+    def is_consistent(country, color):
+        for neighbor in constraints[country]:
+            if neighbor in assignments and assignments[neighbor] == color:
+                return False
+        return True
+    
+    def backtrack(country_index):
+        if country_index == len(countries):
+            return assignments
+        
+        country = countries[country_index]
+        for color in colors:
+            if is_consistent(country, color):
+                assignments[country] = color
+                result = backtrack(country_index + 1)
+                if result:
+                    return result
+                del assignments[country]
+        return None
+    
+    return backtrack(0)
+
+if __name__ == "__main__":
+    countries = ['WA', 'NT', 'SA', 'Q', 'NSW', 'V', 'T']
+    colors = ['Red', 'Green', 'Blue']
+    constraints = {
+        'WA': ['NT', 'SA'],
+        'NT': ['WA', 'SA', 'Q'],
+        'SA': ['WA', 'NT', 'Q', 'NSW', 'V'],
+        'Q': ['NT', 'SA', 'NSW'],
+        'NSW': ['SA', 'Q', 'V'],
+        'V': ['SA', 'NSW'],
+        'T': []
+    }
+
+    solution = map_coloring(countries, colors, constraints)
+    if solution:
+        print("Map Coloring Solution:")
+        for country, color in solution.items():
+            print(f"{country}: {color}")
+    else:
+        print("No solution found.")
