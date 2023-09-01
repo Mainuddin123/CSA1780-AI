@@ -1,0 +1,63 @@
+from queue import Queue
+
+def is_valid(state):
+    m, c, b = state
+    if m < 0 or c < 0 or m > 3 or c > 3:
+        return False
+    if m < c and m > 0:
+        return False
+    if 3 - m < 3 - c and 3 - m > 0:
+        return False
+    return True
+
+def is_goal(state):
+    return state == (0, 0, 0)
+
+def get_neighbors(state):
+    neighbors = []
+    m, c, b = state
+
+    if b == 1:
+        neighbors.append((m - 2, c, 0))
+        neighbors.append((m, c - 2, 0))
+        neighbors.append((m - 1, c - 1, 0))
+        neighbors.append((m - 1, c, 0))
+        neighbors.append((m, c - 1, 0))
+    else:
+        neighbors.append((m + 2, c, 1))
+        neighbors.append((m, c + 2, 1))
+        neighbors.append((m + 1, c + 1, 1))
+        neighbors.append((m + 1, c, 1))
+        neighbors.append((m, c + 1, 1))
+
+    return [neighbor for neighbor in neighbors if is_valid(neighbor)]
+
+def bfs():
+    start_state = (3, 3, 1)
+    queue = Queue()
+    queue.put([start_state])
+
+    while not queue.empty():
+        path = queue.get()
+        current_state = path[-1]
+
+        if is_goal(current_state):
+            return path
+
+        for neighbor in get_neighbors(current_state):
+            if neighbor not in path:
+                new_path = list(path)
+                new_path.append(neighbor)
+                queue.put(new_path)
+
+def main():
+    solution_path = bfs()
+    if solution_path:
+        print("Solution:")
+        for state in solution_path:
+            print(state)
+    else:
+        print("No solution found.")
+
+if __name__ == "__main__":
+    main()
